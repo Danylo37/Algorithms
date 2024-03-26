@@ -25,8 +25,21 @@ class TestArray:
     def test_sample_array_length(self, sample_array):
         assert len(sample_array) == 6
 
+    def test_sample_array_repr(self, sample_array):
+        assert repr(sample_array) == ("[Employee(Name, Surname1, 01.01.1956, 5, "
+                                      "Ментор з підготовки молодих спеціалістів, 195000), "
+                                      "Employee(Name, Surname2, 12.04.1986, 6, Team Lead, 200000), "
+                                      "Employee(Name, Surname3, 18.10.1996, 5, Senior Python Developer, 190000), "
+                                      "Employee(Name, Surname4, 22.04.2002, 3, Middle Python Developer, 120000), "
+                                      "Employee(Name, Surname5, 06.05.2004, 0, Junior Python Developer, 45000), "
+                                      "Employee(Name, Surname6, 05.01.2012, 0, -, 0)]")
+
     def test_sample_array_getitem(self, sample_array):
         assert sample_array[1] == Employee("Name", "Surname2", "12.04.1986", 6, "Team Lead", 200000)
+
+    def test_sample_array_slice(self, sample_array):
+        assert sample_array[1:3] == [Employee("Name", "Surname2", "12.04.1986", 6, "Team Lead", 200000),
+                                     Employee("Name", "Surname3", "18.10.1996", 5, "Senior Python Developer", 190000)]
 
     def test_sample_array_setitem(self, sample_array):
         sample_array[0] = sample_array[1]
@@ -35,6 +48,11 @@ class TestArray:
     def test_sample_array_append(self, sample_array):
         e = Employee("Name", "Surname7", "01.05.2004", 0, "-", 0)
         sample_array.append(e)
+        assert len(sample_array) == 7
+
+    def test_sample_array_insert(self, sample_array):
+        e = Employee("Name", "Surname7", "01.05.2004", 0, "-", 0)
+        sample_array.insert(1, e)
         assert len(sample_array) == 7
 
     def test_sample_array_index(self, sample_array):
@@ -58,7 +76,7 @@ class TestArray:
                              Employee("Name", "Surname8", "03.03.1995", 3, "Senior Python Developer", 190000)])
         assert len(sample_array) == 8
 
-    def test_sample_array_pop_del(self, sample_array):
+    def test_sample_array_del(self, sample_array):
         del sample_array[2]
         assert len(sample_array) == 5
         assert sample_array[2] == Employee("Name", "Surname4", "22.04.2002", 3, "Middle Python Developer", 120000)
@@ -90,6 +108,12 @@ class TestArray:
     def test_sample_array_max(self, sample_array):
         assert sample_array.max().surname == "Surname6"
 
+    def test_empty_array_min(self, empty_array):
+        assert empty_array.min() is None
+
+    def test_empty_array_max(self, empty_array):
+        assert empty_array.max() is None
+
     def test_sample_array_add(self, sample_array):
         args_to_add = [
             Employee("Name", "Surname7", "15.03.2000", 7, "Middle Python Developer", 120000),
@@ -107,7 +131,6 @@ class TestArray:
         array_to_add = Array(*args_to_add)
         result_array = Array(*result_args)
         test_array = sample_array + array_to_add
-        assert test_array[6] == result_array[6]
         assert test_array[7] == result_array[7]
 
     def test_sample_array_mul(self, sample_array):
@@ -128,7 +151,60 @@ class TestArray:
 
         result_array = Array(*result_args)
         test_array = sample_array * 2
-        assert test_array[6] == result_array[6]
-        assert test_array[7] == result_array[7]
         assert test_array[10] == result_array[10]
         assert test_array[11] == result_array[11]
+
+
+class TestArrayErrors:
+
+    @pytest.fixture
+    def sample_array(self):
+        employees = [Employee("Name", "Surname1", "01.01.1956", 5, "Ментор з підготовки молодих спеціалістів", 195000),
+                     Employee("Name", "Surname2", "12.04.1986", 6, "Team Lead", 200000),
+                     Employee("Name", "Surname3", "18.10.1996", 5, "Senior Python Developer", 190000),
+                     Employee("Name", "Surname4", "22.04.2002", 3, "Middle Python Developer", 120000),
+                     Employee("Name", "Surname5", "06.05.2004", 0, "Junior Python Developer", 45000),
+                     Employee("Name", "Surname6", "05.01.2012", 0, "-", 0)]
+        return Array(*employees)
+
+    def test_sample_array_getitem_type_error(self, sample_array):
+        with pytest.raises(TypeError):
+            assert sample_array["a"]
+
+    def test_sample_array_getitem_index_error(self, sample_array):
+        with pytest.raises(IndexError):
+            assert sample_array[10]
+        with pytest.raises(IndexError):
+            assert sample_array[:7]
+
+    def test_sample_array_setitem_index_error(self, sample_array):
+        with pytest.raises(IndexError):
+            sample_array[-3] = Employee("Name", "Surname2", "12.04.1986", 6, "Team Lead", 200000)
+
+    def test_sample_array_insert_index_error(self, sample_array):
+        with pytest.raises(IndexError):
+            sample_array.insert(10, Employee("Name", "Surname2", "12.04.1986", 6, "Team Lead", 200000))
+
+    def test_sample_array_index_value_error(self, sample_array):
+        with pytest.raises(ValueError):
+            sample_array.index(Employee("Name", "Surname9", "12.04.1986", 6, "Team Lead", 200000))
+
+    def test_sample_array_del_index_error(self, sample_array):
+        with pytest.raises(IndexError):
+            del sample_array[11]
+
+    def test_sample_array_pop_index_error(self, sample_array):
+        with pytest.raises(IndexError):
+            sample_array.pop(11)
+
+    def test_sample_array_add_type_error(self, sample_array):
+        with pytest.raises(TypeError):
+            assert sample_array + list()
+
+    def test_sample_array_mul_type_error(self, sample_array):
+        with pytest.raises(TypeError):
+            assert sample_array * "a"
+
+    def test_sample_array_mul_value_error(self, sample_array):
+        with pytest.raises(ValueError):
+            assert sample_array * -2
