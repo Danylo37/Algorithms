@@ -48,11 +48,13 @@ class TestArray:
     def test_sample_array_append(self, sample_array):
         e = Employee("Name", "Surname7", "01.05.2004", 0, "-", 0)
         sample_array.append(e)
+        assert sample_array[6] == Employee("Name", "Surname7", "01.05.2004", 0, "-", 0)
         assert len(sample_array) == 7
 
     def test_sample_array_insert(self, sample_array):
         e = Employee("Name", "Surname7", "01.05.2004", 0, "-", 0)
         sample_array.insert(1, e)
+        assert sample_array[1] == Employee("Name", "Surname7", "01.05.2004", 0, "-", 0)
         assert len(sample_array) == 7
 
     def test_sample_array_index(self, sample_array):
