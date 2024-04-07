@@ -93,7 +93,6 @@ class Employee(EmployeeBasic):
             self.__experience = value
 
     def __eq__(self, other):
-        """Метод порівняння в ПР3-6 двох об'єктів для пошуку збігу"""
         return (self.surname == other.surname and
                 self.name == other.name and
                 self.birthday == other.birthday and
@@ -102,11 +101,17 @@ class Employee(EmployeeBasic):
                 self.experience == other.experience)
 
     def __le__(self, other):
-        """Метод визначення меншого в ПР3-6 з двох об'єктів для впорядкування"""
         return (self.surname, self.name, self.birthday, self.position, self.salary, self.experience) \
             <= (other.surname, other.name, other.birthday, other.position, other.salary, other.experience)
 
     def __ge__(self, other):
-        """Метод визначення більшого в ПР3-6 з двох об'єктів для впорядкування"""
         return (self.surname, self.name, self.birthday, self.position, self.salary, self.experience) \
             >= (other.surname, other.name, other.birthday, other.position, other.salary, other.experience)
+
+    def __lt__(self, other):
+        return (self.surname, self.name, self.birthday, self.position, self.salary, self.experience) \
+            < (other.surname, other.name, other.birthday, other.position, other.salary, other.experience)
+
+    def __gt__(self, other):
+        return (self.surname, self.name, self.birthday, self.position, self.salary, self.experience) \
+            > (other.surname, other.name, other.birthday, other.position, other.salary, other.experience)

@@ -112,7 +112,7 @@ class Array(AbstractStructureBonus):
     def copy(self) -> list[Employee]:
         return self.__array[:self.__size]
 
-    def __iter__(self) -> Iterable:
+    def __iter__(self):
         self.__iter_index = 0
         return self
 
@@ -186,7 +186,7 @@ class Array(AbstractStructureBonus):
                 max_element = i
         return max_element
 
-    def __add__(self, other) -> AbstractStructureBasic | list:
+    def __add__(self, other) -> AbstractStructureBasic:
         if not isinstance(other, Array):
             raise TypeError("Unsupported operand type(s) for +: '{}' and '{}'".format(type(self), type(other)))
 
@@ -195,7 +195,7 @@ class Array(AbstractStructureBonus):
             combined_array.append(item)
         return combined_array
 
-    def __mul__(self, other) -> AbstractStructureBasic | list:
+    def __mul__(self, other) -> AbstractStructureBasic:
         if not isinstance(other, int):
             raise TypeError("can't multiply sequence by non-int of type '{}'".format(type(other)))
         if other < 0:
