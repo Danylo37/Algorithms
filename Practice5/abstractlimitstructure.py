@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 from Practice1.abstract_object import Employee
+from abc import ABC, abstractmethod
 
 
 class AbstractStack(ABC):

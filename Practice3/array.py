@@ -36,7 +36,7 @@ class Array(AbstractStructureBonus):
             result += str(self.__array[i]) + ", "
         return result[:-2] + "]"
 
-    def __getitem__(self, key) -> list[Employee | None]:
+    def __getitem__(self, key) -> list[Employee] | Employee:
         if not (isinstance(key, int) or isinstance(key, slice)):
             raise TypeError("Type must be int or slice")
         if isinstance(key, int) and key >= self.__size:
