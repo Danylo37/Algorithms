@@ -1,26 +1,37 @@
 from Practice3.array import Array
+from typing import Iterable
 
 
-class Sort(Array):
+class Sort(Array, Iterable):
 
     def sort(self, reverse=False):
-        self.__quicksort(0, len(self) - 1, reverse)
+        n = len(self)
+        width = 1
+        while width < n:
+            for i in range(0, n, 2 * width):
+                self.__merge(i, min(i + width, n), min(i + 2 * width, n))
+            width *= 2
+        if reverse:
+            self.reverse()
 
-    def __quicksort(self, low, high, reverse):
-        if low < high:
-            pivot_index = self.__partition(low, high, reverse)
-            self.__quicksort(low, pivot_index - 1, reverse)
-            self.__quicksort(pivot_index + 1, high, reverse)
-
-    def __partition(self, low, high, reverse):
-        pivot = self[high]
-        i = low - 1
-        for j in range(low, high):
-            if (self[j] > pivot) if reverse else (self[j] < pivot):
-                i += 1
-                self[i], self[j] = self[j], self[i]
-        self[i + 1], self[high] = self[high], self[i + 1]
-        return i + 1
+    def __merge(self, start, mid, end):
+        merged = Sort()
+        left, right = start, mid
+        while left < mid and right < end:
+            if self[left] <= self[right]:
+                merged.append(self[left])
+                left += 1
+            else:
+                merged.append(self[right])
+                right += 1
+        while left < mid:
+            merged.append(self[left])
+            left += 1
+        while right < end:
+            merged.append(self[right])
+            right += 1
+        for i, val in enumerate(merged):
+            self[start + i] = val
 
     def sort_by_attr(self, attr: str, reverse=False):
         for i in range(1, len(self)):
